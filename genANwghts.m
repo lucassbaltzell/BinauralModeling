@@ -3,10 +3,10 @@ pth = pwd;
 
 %simulate two thresholds
 fs = 100000;
-% [stim,stim_fs] = audioread('MBUG50K_T16_1_3_F_two.wav');
+[stim,stim_fs] = audioread('MBUG50K_T16_1_3_F_two.wav');
 % [stim,stim_fs] = audioread('MBUG50K_T16_5_3_F_six.wav');
 % [stim,stim_fs] = audioread('MBUG50K_T16_6_3_F_eight.wav');
-[stim,stim_fs] = audioread('MBUG50K_T16_7_3_F_nine.wav');
+% [stim,stim_fs] = audioread('MBUG50K_T16_7_3_F_nine.wav');
 stim = resample(stim,fs,stim_fs);
 dur = length(stim)/fs;
 t = [1/fs:1/fs:dur];

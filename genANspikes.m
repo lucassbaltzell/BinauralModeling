@@ -5,6 +5,7 @@ function psth = genANspikes(stim,stim_fs,dB,CFs,nfibers)
 %described in Bruce et al. (2018): https://doi.org/10.1016/j.heares.2017.12.016
 %AN parameters are fixed
 
+%psth: time-by-CFs-by-nfibers-by-nch output
 %stim: stimulus, could be mono or stereo
 %stim_fs: sampling rate of stimulus
 %dB: desired intensity of stimulus in dB. For stereo stimulus, this can

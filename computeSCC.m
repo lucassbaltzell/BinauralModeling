@@ -71,7 +71,13 @@ function SCC = SCCfun(psth1,psth2,N,binwidth,D,edges)
 %computes the SCC in one direction. Specifically, it computes the 
 %difference (in samples) between each spike in psth1 and all spikes in 
 %psth2. If the spikes in psth2 are delayed relative to the spikes in psth1
-%(i.e. left-leading), the SCC should be shifted in the negative direction
+%(i.e. left-leading), the SCC should be shifted in the negative direction.
+%See Louage et al. (2004) for details, and please cite if this code is used
+%for publication: http://www.physiology.org/doi/10.1152/jn.00816.2003
+
+%psth1: reference psth (post-stimulus time histogram)
+%psth2: psth referenced to psth1
+%number of fibers in each psth (should be the same)
 r1 = mean(mean(psth1));
 r2 = mean(mean(psth2));
 SCC = [];

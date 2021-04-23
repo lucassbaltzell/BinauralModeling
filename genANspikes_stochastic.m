@@ -10,6 +10,7 @@ function psth = genANspikes_stochastic(stim,stim_fs,dB,CFs,nfibers,srflg)
 %their LSO-inspired binarual model (https://doi.org/10.1121/10.0001602), we
 %let these draws be fully correlated across ears for binarual input
 
+%psth: time-by-CFs-by-nfibers-by-nch output
 %stim: stimulus, could be mono or stereo
 %stim_fs: sampling rate of stimulus
 %dB: desired intensity of stimulus in dB. For stereo stimulus, this can
@@ -20,6 +21,8 @@ function psth = genANspikes_stochastic(stim,stim_fs,dB,CFs,nfibers,srflg)
 %"1" indicates low, "2" indicates medium, and "3" indicates high. Following
 %Liberman (1978), we use 16% low, 23% med, and 61% high spontaneous rate
 %for srflg = 0
+
+%created by Luke Baltzell 04/23/21
 
 if nargin == 5
     srflg = 0;
@@ -83,7 +86,7 @@ end
 tabs_lims = [0.0002085 0.0006915];  %tabs is the range of absolute refractory period in s
 trel_lims = [0.000131 0.000894];  %trel is the range of relative refractory period in s
 
-D = round(reptime*fs);
+D = round(reptime*fs); %number of samples for the psth
 tinds = rand(length(CFs),nfibers); %generate random values for tabs and trel
 if srflg ~= 0
     sr = normrnd(spont.mu,spont.sd,length(CFs),nfibers);
