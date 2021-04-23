@@ -16,6 +16,9 @@
  *     Muhammad S. A. Zilany (msazilany@gmail.com) - December 2017 %%%
  *
  */
+/*Modified by Luke Baltzell on 11/04/20. The cutoff frequency for the inner
+ hair cell was reduced from 3 kHz down to 1.25 kHz (line 360). Please acknowledge
+ this modification if you publish any results using this code*/
 
 #include <stdio.h>
 #include <stdlib.h>

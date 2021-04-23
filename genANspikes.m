@@ -1,7 +1,9 @@
 function psth = genANspikes(stim,stim_fs,dB,CFs,nfibers)
 %generates post-stimulus spike histograms for a vector of center
 %frequencies and for a set of fibers corresponding to each center
-%frequency. In this function, AN parameters are fixed.
+%frequency. In this function we call the Bruce, Erfani & Zilany model 
+%described in Bruce et al. (2018): https://doi.org/10.1016/j.heares.2017.12.016
+%AN parameters are fixed
 
 %stim: stimulus, could be mono or stereo
 %stim_fs: sampling rate of stimulus

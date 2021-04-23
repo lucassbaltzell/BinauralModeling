@@ -28,3 +28,11 @@
 % of sampling rates between 100 kHz and 500 kHz.
 % It is recommended to run the model at 100 kHz for CFs up to 20 kHz, and
 % at 200 kHz for CFs> 20 kHz to 40 kHz.
+
+%Modified by Luke Baltzell: The cutoff frequency of the low-pass filter on
+%the IHC was reduced from 3 kHz down to 1.25 kHz. This was done so that
+%human sensitivity to pure-tone ITDs was beeter captured by this peripheral
+%model, which was designed primarily to account for physiological data in 
+%the cat. Effectivly, this modification limits the upper limit of phase locking,
+%thought to be around 1.5 kHz in humans (and around 3 kHz in cat).
+%(see Vershooten et al., 2019: https://doi.org/10.1016/j.heares.2019.03.011) 
