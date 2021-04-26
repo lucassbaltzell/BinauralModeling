@@ -32,8 +32,8 @@ for n = 1:Ntrials
     tStim{1,n} = y;
 end
 
-binwidth_t = 20e-6; %in s
-binwidth = binwidth_t*fs; %samples
+binwidth_t = 20; %in s (20 us)
+binwidth = binwidth_t*(fs/1e6); %samples
 for t = 1:Ntrials
     tstim = tStim{1,t};
     psth = genANspikes_stochastic(tstim,fs,dB,CFs,Nfibers,0);
