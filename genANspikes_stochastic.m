@@ -125,13 +125,13 @@ if sflg == 1
         end
     end
 else
-    psth = zeros(D,nfibers,length(CFs));
+    psth = zeros(D,length(CFs),nfibers);
     for n = 1:nfibers
         for f = 1:length(CFs)
             tabs = tinds(f,n)*(tabs_lims(2)-tabs_lims(1))+tabs_lims(1);
             trel = tinds(f,n)*(trel_lims(2)-trel_lims(1))+trel_lims(1);
             vihc = model_IHC_BEZ2018(pin',CFs(f),nrep,dt,reptime,cohc,cihc,species);
-            psth(:,f,n) = model_Synapse_BEZ2018(vihc,CFs(f),nrep,dt,noiseType,implnt,spont,tabs,trel);
+            psth(:,f,n) = model_Synapse_BEZ2018(vihc,CFs(f),nrep,dt,noiseType,implnt,sr(f,n),tabs,trel);
         end
     end
 end

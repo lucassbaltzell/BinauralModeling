@@ -3,6 +3,8 @@
 %phenomenolgical auditory nerve (AN) model. See Baltzell et al. (under 
 %review) for further details
 
+%created by Luke Baltzell 03/15/21
+
 %load stimulus
 [stim,stim_fs] = audioread('BUG_T16_1_3.wav'); %"two"
 
@@ -32,7 +34,7 @@ for n = 1:Ntrials
     tStim{1,n} = y;
 end
 
-binwidth_t = 20; %in s (20 us)
+binwidth_t = 20; %in microseconds (20 us)
 binwidth = binwidth_t*(fs/1e6); %samples
 for t = 1:Ntrials
     tstim = tStim{1,t};
