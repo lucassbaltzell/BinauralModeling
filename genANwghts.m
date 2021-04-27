@@ -36,7 +36,7 @@ binwidth_t = 20; %in s (20 us)
 binwidth = binwidth_t*(fs/1e6); %samples
 for t = 1:Ntrials
     tstim = tStim{1,t};
-    psth = genANspikes_stochastic(tstim,fs,dB,CFs,Nfibers,0);
+    psth = genANspikes_stochastic(tstim,fs,[dB dB],CFs,Nfibers,0);
     SCCwght = zeros(size(psth,1),length(CFs));
     for f = 1:cf_n
         xl = squeeze(psth(:,f,:,1));
@@ -48,6 +48,19 @@ for t = 1:Ntrials
     centroid(t) = sum(SCCall.*xax*binwidth_t)/sum(SCCall*binwidth_t); %get centroid
 end
 
-AN_150us.y = centroid';
-AN_150us.x = tDlys';
-save('AN_nine_150us','AN_150us')
+y = centroid';
+x = tDlys';
+mdl = fitlm(x,y);
+Beta = mdl.Coefficients{2:end,1};
+Beta_norm = Beta/sum(Beta);
+
+binlims = [0:winlen:winlen*15]*1e3;
+xbin = mean([binlims(1:end-1); binlims(2:end)]);
+p1 = figure;
+plot(xbin,Beta_norm,'ko','markerfacecolor','k','markersize',8)
+xticks(binlims)
+xlim([binlims(1)-(winlen*1e3/2) binlims(end)+((winlen*1e3/2))])
+xlabel('time (ms)')
+ylabel('normalized weight (a.u.)')
+title('TWF for "two"')
+set(p1,'fontsize',12)

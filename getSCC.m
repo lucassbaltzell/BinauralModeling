@@ -29,6 +29,7 @@ end
 r1 = mean(mean(psth1));
 r2 = mean(mean(psth2));
 SCC = [];
+temp = [];
 for n = 1:N1
     for nn = 1:N2
         st1 = find(psth1(:,n) == 1);
