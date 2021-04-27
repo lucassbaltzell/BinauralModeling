@@ -1,13 +1,18 @@
-function [fsig,fsx,y,itd_thresh] = fitInterp(x,y,pflg,DPT)
-%x should be in units of log(ITD), ex. x = log([10 20 40 80 160 320])
-%y is the corresponding d-prime estimate
-%beta are the parameter estimates for the sigmoid
-%fsig is the fitted sigmoid with a resolution of 1 us
-%DPT is the target d-prime
+function [fsig,fitx,y,itd_thresh] = fitInterp(x,y,DPT,pflg)
+%This function interpolates over a set of anchor points [x,y], and returns
+%a threshold corresponding to DPT
 
-if nargin < 4 && nargout == 5
-    disp('Too many output arguments')
-end
+%x: should be in units of log(ITD), ex. x = log([10 20 40 80 160 320])
+%y: the corresponding d-prime estimate for x
+%DPT: target d-prime
+%pflg: if 1 plot, if 0 do not plot
+
+%fsig: interpolated y with a resolution of 1 us
+%fitx: interpolated x-axis
+%y: original y input with cutoff applied
+%itd_thresh: reulting ITD threshold corresponding to DPT
+
+%created by Luke Baltzell, modified 04/27/21
 
 %Apply limits to y-values
 llim = 0; %lower limit
@@ -26,21 +31,18 @@ for i = mx_ind:length(y)
     y(i) = mx_val;
 end
 
-fsx = log([exp(x(1)):1:exp(x(end))]);
+fitx = log([exp(x(1)):1:exp(x(end))]); 
+fsig = interp1(x,y,fitx,'pchip');
 
-fsig = interp1(x,y,fsx,'pchip');
-
-if nargin == 4
-    [val,ind] = min(abs(fsig - DPT));
-    if val > 0.1
-        ind = length(fsig);
-    end
-    itd_thresh = exp(fsx(ind));
+[val,ind] = min(abs(fsig - DPT));
+if val > 0.1
+    ind = length(fsig);
 end
+itd_thresh = exp(fitx(ind));
 
 if pflg == 1
     figure
-    plot(fsx,fsig,'b','linewidth',1.5)
+    plot(fitx,fsig,'b','linewidth',1.5)
     hold on
     plot(x,y,'ko','markerfacecolor','k','markersize',10)
     xticks(x)
@@ -51,5 +53,4 @@ if pflg == 1
     ylabel('d-prime')
     set(gca,'fontsize',14)
 end
-
 end
