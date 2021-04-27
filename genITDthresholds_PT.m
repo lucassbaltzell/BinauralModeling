@@ -95,7 +95,7 @@ for f = 1:cf_n
     end
 end
 
-%obtain ITD threshold and plot
+%plot interpolated sensitivity and obtain ITD threshold
 DPT = 1.2; %3-down/1-up (80% correct)
 x = log(abs(dlys(2:end)*1e6));
 figure
@@ -109,11 +109,40 @@ for f = 1:cf_n
     ylim([0 5])
     xline(log(thresh(f)),'r--','linewidth',1.5);
     xticks(x);
-    xticklabels({num2str(exp(x(1))),num2str(exp(x(2))),num2str(exp(x(3))),...
-        num2str(exp(x(4))),num2str(exp(x(5))),num2str(exp(x(6)))});
+    for i = 1:length(x)
+        xlbls{1,i} = num2str(exp(x(i)));
+    end
+    xticklabels(xlbls);
     xlabel('ITD \mus','fontsize',12)
     ylabel('d-prime','fontsize',12)
     title([num2str(cfvec(f)) ' Hz'],'fontsize',14)
 end
+clear xlbls
+
+%plot thresholds as a function of CF
+thresh_p1 = thresh(thresh ~= max(exp(x)));
+thresh_p2 = thresh(thresh == max(exp(x))); %identify all thresholds that equal the maximum possible ITD
+figure
+xf = [1:length(thresh_p1)];
+semilogy(xf,thresh_p1,'bs--','markerfacecolor','b','markersize',12,...
+    'linewidth',2);
+hold on
+for i = length(thresh_p2)
+    semilogy(length(xf)+i,2000,'bs','markerfacecolor','b','markersize',12,...
+        'linewidth',2);
+end
+xlim([0.5 cf_n+0.5])
+xticks(1:length(thresh))
+for i = 1:length(thresh)
+    xlbls{1,i} = num2str(cfvec(i));
+end
+xticklabels(xlbls);
+ylim([10 2000])
+yline(1000,'r:','linewidth',2);
+yticks([10,100,1000,2000])
+yticklabels({'10','100','1000','u.m.'});
+xlabel('Frequency (Hz)','fontsize',14)
+ylabel('ITD threshold (\mus)','fontsize',14)
+set(gca,'fontsize',12,'linewidth',1.5)
 
 %compare to behavioral data (Brughera et al., 2013)
