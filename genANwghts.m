@@ -48,19 +48,24 @@ for t = 1:Ntrials
     centroid(t) = sum(SCCall.*xax*binwidth_t)/sum(SCCall*binwidth_t); %get centroid
 end
 
+%run linear regression to obtain weights
 y = centroid';
 x = tDlys';
 mdl = fitlm(x,y);
 Beta = mdl.Coefficients{2:end,1};
+SE = mdl.Coefficients{2:end,2};
 Beta_norm = Beta/sum(Beta);
+SE_norm = SE/sum(Beta);
 
+%plot weights
 binlims = [0:winlen:winlen*15]*1e3;
 xbin = mean([binlims(1:end-1); binlims(2:end)]);
-p1 = figure;
-plot(xbin,Beta_norm,'ko','markerfacecolor','k','markersize',8)
+figure
+p1 = errorbar(xbin,Beta_norm,SE_norm,'ko','markerfacecolor','k','markersize',8);
 xticks(binlims)
 xlim([binlims(1)-(winlen*1e3/2) binlims(end)+((winlen*1e3/2))])
-xlabel('time (ms)')
-ylabel('normalized weight (a.u.)')
-title('TWF for "two"')
-set(p1,'fontsize',12)
+xlabel('time (ms)','fontsize',12)
+ylim([0 0.25])
+ylabel('normalized weight (a.u.)','fontsize',12)
+title('TWF for "two"','fontsize',14)
+set(gca,'linewidth',2)
