@@ -18,6 +18,18 @@ function [psth,x] = genBEZpsth(stim,stim_fs,dB,CFs,nfibers,ANpar)
 
 %created by Luke Baltzell 04/28/21
 
+if nargin == 5
+    ANpar.nrep = 1;       %number of repetitions for the psth
+    ANpar.cohc = 1;       %OHC scaling factor: 1 is normal OHC function; 0 is complete OHC dysfunction
+    ANpar.cihc = 1;       %IHC scaling factor: 1 is normal IHC function; 0 is complete IHC dysfunction
+    ANpar.species = 2;    %human with BM tuning from Shera et al. (PNAS 2002)
+    ANpar.noiseType = 1;  %1 for variable fGn and 0 for fixed (frozen) fGn
+    ANpar.implnt = 0;     %implnt is for "approxiate" or "actual" implementation of the power-law functions: "0" for approx. and "1" for actual implementation
+    ANpar.spont = 60;     %spontanteous firing rate of fiber (60 spikes/sec is relatively high)
+    ANpar.tabs = 0.0007;  %tabs is the absolute refractory period in s
+    ANpar.trel = 0.0006;  %trel is the baselines mean relative refractory period in s
+end
+
 %make sure stimuli are column vectors
 [nch,dim] = min(size(stim));
 if dim == 1
