@@ -102,6 +102,7 @@ figure
 for f = 1:cf_n
     y = abs(dprime(f,:));
     [fity,fitx,y_anch,thresh(f)] = fitInterp(x,y,DPT,0);
+%     [fity,fitx,y_anch,thresh(f)] = fitSigmoid(x,y,DPT,0);
     subplot(1,cf_n,f)
     plot(fitx,fity,'b','linewidth',1.5) %plot interpolated function
     hold on
@@ -127,7 +128,7 @@ xf = [1:length(thresh_p1)];
 semilogy(xf,thresh_p1,'bs--','markerfacecolor','b','markersize',12,...
     'linewidth',2);
 hold on
-for i = length(thresh_p2)
+for i = 1:length(thresh_p2)
     semilogy(length(xf)+i,2000,'bs','markerfacecolor','b','markersize',12,...
         'linewidth',2);
 end
