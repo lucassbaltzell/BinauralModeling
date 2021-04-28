@@ -14,6 +14,8 @@ function [fsig,fitx,y,itd_thresh,beta,MSE] = fitSigmoid(x,y,DPT,pflg)
 %beta: parameter estimates for the sigmoid
 %MSE: error of fit
 
+%created by Luke Baltzell, modified 04/27/21
+
 if nargin < 4 && nargout == 5
     disp('Too many output arguments')
 end
