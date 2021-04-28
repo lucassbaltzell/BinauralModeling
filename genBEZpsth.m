@@ -1,4 +1,4 @@
-function psth = genBEZpsth(stim,stim_fs,dB,CFs,nfibers,ANpar)
+function [psth,x] = genBEZpsth(stim,stim_fs,dB,CFs,nfibers,ANpar)
 %generates post-stimulus spike histograms for a vector of center
 %frequencies and for a set of fibers corresponding to each center
 %frequency. In this function we call the Bruce, Erfani & Zilany model 
@@ -14,6 +14,7 @@ function psth = genBEZpsth(stim,stim_fs,dB,CFs,nfibers,ANpar)
 %ANpar: AN parameters
 
 %psth: time-by-CFs-by-nfibers-by-nch output
+%x: x-axis for psth
 
 %created by Luke Baltzell 04/28/21
 
@@ -42,6 +43,7 @@ end
 Ts = length(stim)/fs;
 reptime = Ts+0.005; %time between stimulus repetitions in seconds (or duration of single repetition)
 D = round(reptime*fs); %duration of psth
+x = [1:D]/fs; %x-axis for psth
 
 %convert to Pa from dB
 p0 = 0.00002;
@@ -59,7 +61,7 @@ if sflg == 1
         end
     end
 else
-    psth = zeros(D,nfibers,length(CFs));
+    psth = zeros(D,length(CFs),nfibers);
     for n = 1:nfibers
         for f = 1:length(CFs)
             vihc = model_IHC_BEZ2018(pin',CFs(f),ANpar.nrep,dt,reptime,ANpar.cohc,ANpar.cihc,ANpar.species);

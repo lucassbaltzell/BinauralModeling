@@ -14,10 +14,8 @@ function [vs,CFs] = getVS(stim,stim_fs,dB,tf,CFs)
 %created by Luke Baltzell, modified 04/28/21
 
 if nargin == 4
-    CFs = logspace(log10(100),log10(10000),60);
+    CFs = logspace(log10(200),log10(10000),60);
 end
-
-pth = pwd;
 
 %check if stereo input
 [n,m] = size(stim);
@@ -29,6 +27,7 @@ end
 if n > 1
     stim = stim';
 end
+clear n m
 
 %set AN parameters
 nfibers = 1;
@@ -43,17 +42,17 @@ ANpar.tabs = 0.0007;  %tabs is the absolute refractory period in s
 ANpar.trel = 0.0006;  %trel is the baselines mean relative refractory period in s
 
 %generate psth
-PSTH = genBEZpsth(stim,stim_fs,dB,CFs,nfibers,ANpar);
-
+[PSTH,x] = genBEZpsth(stim,stim_fs,dB,CFs,nfibers,ANpar);
+%     x = [dt:dt:reptime];
 for f = 1:length(CFs)
-    psth = squeeze(PSTH(:,f,:,:));
-    [~,s_ind] = find(psth > 0);   
+    psth = squeeze(PSTH(:,f));
+%     [~,spike_ind] = find(psth > 0);
+    spike_ind = find(psth > 0); 
     omega = 2*pi*tf;
-    x = [dt:dt:reptime];
     n_ind = 0;
-    for i = s_ind
-        t = x(i);
-        N = psth(i);
+    for i = 1:length(spike_ind)
+        t = x(spike_ind(i));
+        N = psth(spike_ind(i));
         for n = 1:N
             n_ind = n_ind + 1;
             y(n_ind) = exp(1i*omega*t);
