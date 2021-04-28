@@ -145,5 +145,3 @@ yticklabels({'10','100','1000','u.m.'});
 xlabel('Frequency (Hz)','fontsize',14)
 ylabel('ITD threshold (\mus)','fontsize',14)
 set(gca,'fontsize',12,'linewidth',1.5)
-
-%compare to behavioral data (Brughera et al., 2013)
