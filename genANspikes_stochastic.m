@@ -22,7 +22,8 @@ function psth = genANspikes_stochastic(stim,stim_fs,dB,CFs,nfibers,srflg)
 %Liberman (1978), we use 16% low, 23% med, and 61% high spontaneous rate
 %for srflg = 0
 
-%created by Luke Baltzell 04/23/21
+%created by Luke Baltzell 04/23/21. This function has been replaced by
+%genBEZpsth_stochastic, which allows AN parameters to be given as input
 
 if nargin == 5
     srflg = 0;

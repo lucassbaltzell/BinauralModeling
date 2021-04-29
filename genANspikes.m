@@ -13,6 +13,8 @@ function psth = genANspikes(stim,stim_fs,dB,CFs,nfibers)
 %CFs: vector of center frequencies
 %nfibers: number of fibers per CF
 
+%created by Luke Baltzell 04/23/21. This function has been replaced by
+%genBEZpsth, which allows AN parameters to be given as input
 
 %make sure stimuli are column vectors
 [nch,dim] = min(size(stim));

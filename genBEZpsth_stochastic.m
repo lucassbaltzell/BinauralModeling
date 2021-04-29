@@ -1,9 +1,14 @@
 function [psth,x] = genBEZpsth_stochastic(stim,stim_fs,dB,CFs,nfibers,ANpar)
 %generates post-stimulus spike histograms for a vector of center
 %frequencies and for a set of fibers corresponding to each center
-%frequency. In this function we call the Bruce, Erfani & Zilany model 
+%frequency. In this function we call the Bruce, Erfani & Zilany (BEZ) model 
 %described in Bruce et al. (2018): https://doi.org/10.1016/j.heares.2017.12.016
-%AN parameters are fixed and given in ANpar
+%In this function, some AN parameters are stochastic, providing a more 
+%realistic simulation of a population AN response. Following Bruce et al.
+%(2018), we draw a fully correlated pair of tabs and trel values for each
+%fiber. Following Klug et al. (2020), who use the same AN front end for
+%their LSO-inspired binarual model (https://doi.org/10.1121/10.0001602), we
+%let these draws be fully correlated across ears for binarual input
 
 %stim: stimulus, could be mono or stereo
 %stim_fs: sampling rate of stimulus
