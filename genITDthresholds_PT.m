@@ -55,7 +55,8 @@ for f = 1:cf_n
     tstim = Stim{1,f};
     ANcf = zeros(Ds,Nfibers,Nsets);
     for n = 1:Nsets
-        psth = genANspikes_stochastic(tstim,fs,dB,cfvec(f),Nfibers,0);
+%         psth = genANspikes_stochastic(tstim,fs,dB,cfvec(f),Nfibers,0);
+        psth = genBEZpsth_stochastic(tstim,fs,dB,cfvec(f),Nfibers);
         ANcf(:,:,n) = squeeze(psth);
     end
     ANsets{1,f} = ANcf;
