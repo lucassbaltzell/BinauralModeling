@@ -21,7 +21,6 @@ elseif nargin == 5
 end
 
 t = [1/fs:1/fs:dur];
-
 car = sin(2*pi*cf*t + phi(1));
 mod = 0.5+0.5*sin(2*pi*mod*t + phi(2));
 
