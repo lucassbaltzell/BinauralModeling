@@ -14,7 +14,7 @@ function [psth,x] = genBEZpsth(stim,stim_fs,dB,CFs,nfibers,ANpar)
 %ANpar: AN parameters
 
 %psth: time-by-CFs-by-nfibers-by-nch output
-%x: x-axis for psth
+%x: x-axis for psth in seconds
 
 %created by Luke Baltzell 04/28/21
 
@@ -55,7 +55,7 @@ end
 Ts = length(stim)/fs;
 reptime = Ts+0.005; %time between stimulus repetitions in seconds (or duration of single repetition)
 D = round(reptime*fs); %duration of psth
-x = [1:D]/fs; %x-axis for psth
+x = [1:D]/fs; %x-axis for psth in seconds
 
 %convert to Pa from dB
 p0 = 0.00002;

@@ -20,7 +20,7 @@ function [psth,x] = genBEZpsth_stochastic(stim,stim_fs,dB,CFs,nfibers,ANpar)
 %rates and a distribution of refractory periods.
 
 %psth: time-by-CFs-by-nfibers-by-nch output
-%x: x-axis for psth
+%x: x-axis for psth in seconds
 
 %created by Luke Baltzell 04/28/21
 
