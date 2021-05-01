@@ -16,7 +16,11 @@ function [vs,CFs] = getVS(stim,stim_fs,dB,tf,CFs,pflg)
 
 if nargin == 4
     CFs = logspace(log10(200),log10(10000),60);
+    pflg = 0
+elseif nargin == 5
+    pflg = 0
 end
+    
 
 %check if stereo input
 [n,m] = size(stim);
