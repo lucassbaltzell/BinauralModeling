@@ -3,7 +3,8 @@
 %phenomenolgical auditory nerve (AN) model. This method roughly follows the
 %procedure described by Moncada-Torres et al. (2018)
 %https://doi.org/10.1121/1.5051322, although we obtain somewhat different 
-%results.
+%results. The results of this simulation can be compared with the pure-tone
+%ITD thresholds in human listeners obtained by Brughera et al. (2013)
 
 %In this script, information is not integrated across multiple CFs, and
 %simulated ITD thresholds reflect a single set of fibers with CFs
