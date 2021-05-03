@@ -1,4 +1,4 @@
-function y = genRustleFast(dur,fs,gpwidth)
+function y = genRustle(dur,fs,gpwidth)
 %gpwidth in microseconds
 
 noise = randn(dur*fs,1);
