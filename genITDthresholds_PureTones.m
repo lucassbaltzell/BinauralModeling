@@ -21,6 +21,15 @@
 %sample rate (100 kHz) allows for a delay resolution of 10 us, and so
 %target ITD values (dlys) must be integer multiples of 10 us.
 
+%Delays are limited to 320 us becasue for pure tones, the effective ITD
+%decreases if the delay exceeds a duration corresponding to half of the
+%period. In practice, this decrease in sensitivity occurs as the delay
+%approaches half of the period (e.g. Sayers et al., 1964), and seems to be
+%maximal around T/4, so for a 1.5 kHz pure tone, we expect sensitivity to
+%decrease at delays greater than 167 microseconds. For this reason, the
+%fitInterp and fitSigmoid functions carry the maximum sensitivity obtained
+%at any delay through to all larger delays.
+
 %created by Luke Baltzell for presentation at Binaural Bash 2020. Modified 
 %by Luke Baltzell on 04/27/21
 
