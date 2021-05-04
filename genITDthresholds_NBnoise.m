@@ -18,10 +18,10 @@
 %created by Luke Baltzell for presentation at Binaural Bash 2020. Modified 
 %by Luke Baltzell on 05/03/21
 
-%define narrowband noise paramters following Bernstein 
+%define narrowband noise paramters following Spencer et al. (2016) 
 fs = 100000;
-dur = 0.3; %500 ms
-tc = 0.015; %100 ms ramp
+dur = 0.3; %300 ms
+tc = 0.015; %150 ms ramp
 t = [1/fs:1/fs:dur];
 dB = 65;
 bw = 1/3; %3rd octave

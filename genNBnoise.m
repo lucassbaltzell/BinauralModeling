@@ -35,8 +35,8 @@ if tflg == 0
     y_fft = ifftshift(noise_fft_shft.*pbnd_all);
     y = ifft(y_fft,'symmetric')';
 elseif tflg == 1
-    %8th-order time domain filter
-    N = 4; %forwards-backwards (0-phase) filter so double order
+    %16th-order time domain filter
+    N = 8; %forwards-backwards (0-phase) filter so double order
     Nq = fs/2;
     Wn = [flims(1) flims(2)]/Nq;
     [z,p,k] = butter(N,Wn);
