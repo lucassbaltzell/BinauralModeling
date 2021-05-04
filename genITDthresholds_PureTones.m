@@ -12,9 +12,10 @@
 
 %For the sake of efficiency, rather than simulate new spike trains for each
 %iteration, a set of spike trains are defined (Nsets), and are sampled with
-%replacement on each iteration (Niters). Specifically, a pool of
-%nfibers*Nsets is defined, and on each iteration, a set of nfibers is drawn
-%for each ear.
+%replacement on each iteration (Niters). Because pure tone stimuli are the 
+%same for each set of Nfibers in Nset, a pool of Nfibers*Nsets is defined, 
+%and on each iteration, a set of Nfibers is drawn for each ear from the 
+%pool.
 
 %Also for the sake of efficiency, spike trains are generated using monaural
 %stimuli, and ITDs will be applied by delaying the spike trains. The high
@@ -60,12 +61,11 @@ binwidth = binwidth_t*(fs/1e6); %samples
 
 %generate Nsets
 Ds = (dur+0.005)*fs; %add 5 ms zero pad (mirroring genANspikes) 
-ANsets = cell(1,cf_n);
+ANsets = cell(1,cf_n); 
 for f = 1:cf_n
     tstim = Stim{1,f};
-    ANcf = zeros(Ds,Nfibers,Nsets);
+    ANcf = zeros(Ds,Nfibers,Nsets); %mono stimuli for spike generation
     for n = 1:Nsets
-%         psth = genANspikes_stochastic(tstim,fs,dB,cfvec(f),Nfibers,0);
         psth = genBEZpsth_stochastic(tstim,fs,dB,cfvec(f),Nfibers);
         ANcf(:,:,n) = squeeze(psth);
     end
@@ -77,7 +77,9 @@ centroid = zeros(cf_n,length(dlys),Niters);
 for f = 1:cf_n
     ANcf = reshape(ANsets{1,f},Ds,Nfibers*Nsets);
     for n = 1:Niters
-        inds = randi(Nfibers*Nsets,Nfibers,2); %generate left and right indexes
+        %becasue stimuli are mono, a different spike train index can be
+        %used for each ear
+        inds = randi(Nfibers*Nsets,Nfibers,2); %generate random indexes (Nfibers for each ear)
         for d = 1:length(dlys)
             samp_dly = round(dlys(d)*fs);
             xl = cat(1,zeros(samp_dly,Nfibers),ANcf(1:end-samp_dly,inds(:,1)));
@@ -107,7 +109,7 @@ for f = 1:cf_n
 end
 
 %plot interpolated sensitivity and obtain ITD threshold
-DPT = 1.2; %3-down/1-up (80% correct)
+DPT = sqrt(2)*norminv(0.8); %3-down/1-up (80% correct)
 x = log(abs(dlys(2:end)*1e6));
 figure
 for f = 1:cf_n
@@ -156,3 +158,4 @@ yticklabels({'10','100','1000','u.m.'});
 xlabel('Frequency (Hz)','fontsize',14)
 ylabel('ITD threshold (\mus)','fontsize',14)
 set(gca,'fontsize',12,'linewidth',1.5)
+title('Pure Tones')

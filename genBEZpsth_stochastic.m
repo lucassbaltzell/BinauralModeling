@@ -9,7 +9,10 @@ function [psth,x] = genBEZpsth_stochastic(stim,stim_fs,dB,CFs,nfibers,ANpar)
 %fiber. Following Klug et al. (2020), who use the same AN front end for
 %their LSO-inspired binarual model (https://doi.org/10.1121/10.0001602), we
 %let these draws be fully correlated across ears for binarual input
-
+%OUTPUT
+%psth: time-by-CFs-by-nfibers-by-nch output
+%x: x-axis for psth in seconds
+%INPUT
 %stim: stimulus, could be mono or stereo
 %stim_fs: sampling rate of stimulus
 %dB: desired intensity of stimulus in dB. For stereo stimulus, this can
@@ -19,8 +22,6 @@ function [psth,x] = genBEZpsth_stochastic(stim,stim_fs,dB,CFs,nfibers,ANpar)
 %ANpar: AN parameters. By default, ANpar calls for a mix of spontaneous
 %rates and a distribution of refractory periods.
 
-%psth: time-by-CFs-by-nfibers-by-nch output
-%x: x-axis for psth in seconds
 
 %created by Luke Baltzell 04/28/21
 
