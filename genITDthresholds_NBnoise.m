@@ -10,14 +10,7 @@
 %simulated ITD thresholds reflect an average sensitivity across multiple
 %CFs spanning the bandwidth of the noise stimuli.
 
-%For the sake of efficiency, rather than simulate new spike trains for each
-%iteration, a set of spike trains are defined (Nsets), and are sampled with
-%replacement on each iteration (Niters). Since stimuli are randomly drawn
-%for each set of Nfibers in Nsets, on each iteration, a set of Nfibers
-%corresponding to a particular stimulus is drawn randomly with replacement
-%from Nsets
-
-%Also for the sake of efficiency, spike trains are generated using monaural
+%For the sake of efficiency, spike trains are generated using monaural
 %stimuli, and ITDs will be applied by delaying the spike trains. The high
 %sample rate (100 kHz) allows for a delay resolution of 10 us, and so
 %target ITD values (dlys) must be integer multiples of 10 us.
@@ -36,7 +29,6 @@ cfvec_stim = [500 4000]; %center frequencies for noise stimuli
 ncf_stim = length(cfvec_stim);
 dlys = [0 10 20 40 80 160 320 640 1280]*1e-6; %set of delays over which to calculate sensitivity
 cfvec_AN = logspace(log10(150),log10(10000),60); %generate dense vector of center frequencies
-% cf_n = length(cfvec_AN);
 
 %calculate AN cfs for each stimulus cf
 bw_ext = 1/8; %extend bandwidth by 8th octave
@@ -56,8 +48,7 @@ ncf_fib = size(cf_fib,2);
 
 %set AN parameters
 Nfibers = 35; %desired number of fibers for each CF
-Nsets = 150; %number of sets to draw from 250
-Niters = 100; %number of iterations, drawn with replacement from Nsets
+Nsets = 100; %number of sets to draw from
 binwidth_t = 20; %in microseconds (20 us)
 binwidth = binwidth_t*(fs/1e6); %samples
 
@@ -65,7 +56,6 @@ binwidth = binwidth_t*(fs/1e6); %samples
 Ds = (dur+0.005)*fs; %add 5 ms zero pad (mirroring genANspikes) 
 ANsets = cell(ncf_stim,Nsets);
 for s = 1:ncf_stim
-%     ANcf = zeros(Ds,cfvec_AN,Nfibers,2); %obtain left and right spike train for each draw
     for n = 1:Nsets
         [tstim,flims] = genNBnoise(dur,fs,cfvec_stim(s),bw);
         tstim = rampdamp(tstim,tc,fs);
@@ -76,20 +66,18 @@ for s = 1:ncf_stim
 end
 
 %obtain centroids
-centroid = zeros(ncf_stim,length(dlys),Niters);
+centroid = zeros(ncf_stim,length(dlys),Nsets);
 for s = 1:ncf_stim
-%     ANcf = reshape(ANsets{s,f},Ds,Nfibers*Nsets);
-    for n = 1:Niters
-        nind = randi(Nsets); %draw single stereo set of spike trains
+    for n = 1:Nsets
         for d = 1:length(dlys)
             samp_dly = round(dlys(d)*fs);
             for f = 1:ncf_fib
-                xl = cat(1,zeros(samp_dly,Nfibers),squeeze(ANsets{s,nind}(1:end-samp_dly,f,:,1)));
-                xr = squeeze(ANsets{s,nind}(:,f,:,2));
+                xl = cat(1,zeros(samp_dly,Nfibers),squeeze(ANsets{s,n}(1:end-samp_dly,f,:,1)));
+                xr = squeeze(ANsets{s,n}(:,f,:,2));
                 [SCC,xax] = getSCC(xl,xr,binwidth,fs);
                 SCCwght(f,:) = centralityWeighting1D(xax,SCC,cf_fib(s,f),'stern','pdf',5);
             end
-            SCCall = mean(SCCwght,1);
+            SCCall = mean(SCCwght,1); %average over cf_fib
             centroid(s,d,n) = sum(SCCall.*xax*binwidth_t)/sum(SCCall*binwidth_t); %get centroid
         end
     end

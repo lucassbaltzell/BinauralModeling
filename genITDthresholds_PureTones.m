@@ -10,17 +10,21 @@
 %simulated ITD thresholds reflect a single set of fibers with CFs
 %corresponding to the frequency of the pure tone
 
-%For the sake of efficiency, rather than simulate new spike trains for each
-%iteration, a set of spike trains are defined (Nsets), and are sampled with
-%replacement on each iteration (Niters). Because pure tone stimuli are the 
-%same for each set of Nfibers in Nset, a pool of Nfibers*Nsets is defined, 
-%and on each iteration, a set of Nfibers is drawn for each ear from the 
-%pool.
-
-%Also for the sake of efficiency, spike trains are generated using monaural
+%For the sake of efficiency, spike trains are generated using monaural
 %stimuli, and ITDs will be applied by delaying the spike trains. The high
 %sample rate (100 kHz) allows for a delay resolution of 10 us, and so
 %target ITD values (dlys) must be integer multiples of 10 us.
+
+%%%%ONLY FOR PURE TONE SIMULATIONS%%%%
+%Also for the sake of efficiency (improved sampling), rather than simulate 
+%new spike trains for each iteration over which the distribution is built,
+%a set of spike trains are defined (Nsets), and are sampled with
+%replacement on each iteration (Niters). Because pure tone stimuli are the 
+%same for each set of Nfibers in Nset, a pool of Nfibers*Nsets is defined, 
+%and on each iteration, a set of Nfibers is drawn for each ear from the 
+%pool. This reduces the number of simulated spike trains required to
+%acheive random sampling representative of the population
+%%%%_____________________________%%%%
 
 %Delays are limited to 320 us becasue for pure tones, the effective ITD
 %decreases if the delay exceeds a duration corresponding to half of the
