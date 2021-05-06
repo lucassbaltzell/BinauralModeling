@@ -47,7 +47,7 @@ dB = 70;
 dlys = [0 10 20 40 80 160 320]*1e-6; %set of delays over which to calculate sensitivity
 cfvec = [250 500 750 1000 1250 1500];
 cf_n = length(cfvec);
-% cfvec = logspace(log10(200),log10(10000),cf_n);
+% cfvec = logspace(log10(150),log10(10000),cf_n);
 
 %generate pure tones
 Stim = cell(1,cf_n);
