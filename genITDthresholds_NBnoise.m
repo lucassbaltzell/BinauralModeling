@@ -48,32 +48,25 @@ ncf_fib = size(cf_fib,2);
 
 %set AN parameters
 Nfibers = 35; %desired number of fibers for each CF
-Nsets = 100; %number of sets to draw from
+Nsets = 100; %number of sets to stimulate
 binwidth_t = 20; %in microseconds (20 us)
 binwidth = binwidth_t*(fs/1e6); %samples
 
 %generate Nsets
 Ds = (dur+0.005)*fs; %add 5 ms zero pad (mirroring genANspikes) 
-ANsets = cell(ncf_stim,Nsets);
+% ANsets = cell(ncf_stim,Nsets);
+centroid = zeros(ncf_stim,length(dlys),Nsets);
 for s = 1:ncf_stim
     for n = 1:Nsets
         [tstim,flims] = genNBnoise(dur,fs,cfvec_stim(s),bw);
         tstim = rampdamp(tstim,tc,fs);
         tstim(2,:) = tstim; %stereo stimulus to generate L/R pairs of spikes for each stimulus
         psth = genBEZpsth_stochastic(tstim,fs,dB,cf_fib(s,:),Nfibers);
-        ANsets{s,n} = squeeze(psth);
-    end
-end
-
-%obtain centroids
-centroid = zeros(ncf_stim,length(dlys),Nsets);
-for s = 1:ncf_stim
-    for n = 1:Nsets
         for d = 1:length(dlys)
             samp_dly = round(dlys(d)*fs);
             for f = 1:ncf_fib
-                xl = cat(1,zeros(samp_dly,Nfibers),squeeze(ANsets{s,n}(1:end-samp_dly,f,:,1)));
-                xr = squeeze(ANsets{s,n}(:,f,:,2));
+                xl = cat(1,zeros(samp_dly,Nfibers),squeeze(psth(1:end-samp_dly,f,:,1)));
+                xr = squeeze(psth(:,f,:,2));
                 [SCC,xax] = getSCC(xl,xr,binwidth,fs);
                 SCCwght(f,:) = centralityWeighting1D(xax,SCC,cf_fib(s,f),'stern','pdf',5);
             end
