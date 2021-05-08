@@ -47,7 +47,7 @@ end
 ncf_fib = size(cf_fib,2);
 
 %set AN parameters
-Nfibers = 35; %desired number of fibers for each CF
+Nfibers = 28; %desired number of fibers for each CF
 Nsets = 100; %number of sets to stimulate
 binwidth_t = 20; %in microseconds (20 us)
 binwidth = binwidth_t*(fs/1e6); %samples
@@ -63,9 +63,10 @@ for s = 1:ncf_stim
         tstim(2,:) = tstim; %stereo stimulus to generate L/R pairs of spikes for each stimulus
         psth = genBEZpsth_stochastic(tstim,fs,dB,cf_fib(s,:),Nfibers);
         for d = 1:length(dlys)
-            samp_dly = round(dlys(d)*fs);
+%             samp_dly = round(dlys(d)*fs);
             for f = 1:ncf_fib
-                xl = cat(1,zeros(samp_dly,Nfibers),squeeze(psth(1:end-samp_dly,f,:,1)));
+%                 xl = cat(1,zeros(samp_dly,Nfibers),squeeze(psth(1:end-samp_dly,f,:,1)));
+                xl = spikedelay(squeeze(psth(:,f,:,1)),dlys(d),fs);
                 xr = squeeze(psth(:,f,:,2));
                 [SCC,xax] = getSCC(xl,xr,binwidth,fs);
                 SCCwght(f,:) = centralityWeighting1D(xax,SCC,cf_fib(s,f),'stern','pdf',5);
