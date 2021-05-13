@@ -43,8 +43,8 @@ if nargin == 2
         stimpar.afc = 2; %2AFC
     elseif strcmp(stimtype,'transTone') == 1
         %define transposed tone parameters following Bernstein & Trahiotis (2002)
-        stimpar.stim_cfs(1,:) = [4000 4000 4000 4000 4000 4000]; %carrier frequencies
-        stimpar.stim_cfs(2,:) = [32 64 128 256 512 1024]; %modulation frequencies
+        stimpar.stim_cfs(1,:) = [4000 4000 4000 4000 4000]; %carrier frequencies
+        stimpar.stim_cfs(2,:) = [32 64 128 256 512]; %modulation frequencies
         stimpar.dur = 0.3;
         stimpar.tc = 0.02;
         stimpar.dB = 75;
