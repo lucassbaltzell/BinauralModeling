@@ -105,7 +105,11 @@ x = [1:D]/fs; %x-axis for psth
 %convert to Pa from dB
 p0 = 0.00002;
 Pa = p0*10.^(dB/20);
-pin = stim.*(Pa./rms(stim));
+if rms(stim) == 0
+    pin = stim;
+else
+    pin = stim.*(Pa./rms(stim));
+end
 
 if sflg == 1
     psth = zeros(D,length(CFs),nfibers,2);
