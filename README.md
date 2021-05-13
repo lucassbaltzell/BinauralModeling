@@ -13,7 +13,7 @@ Also included is a function "LSOmodelCOC.m", written by Go Ashida and modified b
 
 Also included is a stimulus file ('BUG_T16_1_3.wav') from the BUG corpus described in Kidd et al. (2008) https://asa.scitation.org/doi/10.1121/1.2998980. Please cite if this stimulus is to be used.
 
-The functions "genBEZpsth.m" and"genBEZpsth_stochasic.m" generate spike train outputs from the BEZ auditory nerve model with momdified IHC filter
+The functions "genBEZpsth.m" and"genBEZpsth_stochasic.m" generate spike train outputs from the BEZ auditory nerve model with modified IHC filter
 
 # modeling ITD sensitivity
 The function "genITDthresholds.m" generates predicted ITD thresholds for a given stimulus type (e.g. pure tone, narrowband noise), a given model type ('MSO' vs 'LSO'), and a given set of stimulus parameters. ITD sensitivity is simulated using a pipeline modeled after Moncada-Torres et al. (2018).
