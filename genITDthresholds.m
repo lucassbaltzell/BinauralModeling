@@ -1,15 +1,26 @@
 function [thresh,cf_fib] = genITDthresholds(stimtype,mdltype,stimpar)
-%This script simulates ITD sensitivity for a pair of low-frequency and 
-%high-frequency narrowband noises. This simulation is based on simulated 
-%spike trains at the output of the BEZ phenomenolgical auditory nerve (AN) 
-%model. This method roughly follows the procedure described by Moncada-
-%Torres et al. (2018) https://doi.org/10.1121/1.5051322. The results of
-%this simulation can be compared with the results of Spencer et al. (2016):
-%https://doi.org/10.1121/1.4962444, among others.
+%This script simulates ITD sensitivity for a given stimulus type and model 
+%type. This simulation is based on simulated spike trains at the output of 
+%the BEZ phenomenolgical auditory nerve (AN) model. This model, described 
+%by Bruce et al. (2018) https://doi.org/10.1016/j.heares.2017.12.016, 
+%can be downloaded at https://www.urmc.rochester.edu/labs/carney.aspx
+%We have modified the low-pass filter cutoff of the inner hair cell model
+%in order to better account for observed human phase locking limits (see
+%README)
 
-%In this script, information is integrated across multiple CFs, and
-%simulated ITD thresholds reflect an average sensitivity across multiple
-%CFs spanning the bandwidth of the noise stimuli.
+%The method for obtaining ITS sensitivity roughly follows the procedure 
+%described by Moncada-Torres et al. (2018) https://doi.org/10.1121/1.5051322.
+
+%The 'MSO' model performs a cross-correlation on the spike-train output of
+%the auditory nerve model, following Louge et al. (2004) 
+%https://doi.org/10.1152/jn.00816.2003. A centrality weight is applied to
+%this output following Stern & Shear (1996) https://doi.org/10.1121/1.417937
+
+%The 'LSO' model performs a hemispheric coincidence detection with
+%ipsilateral and contralateral inputs. This model was described by Ashida
+%et al. (2017) https://doi.org/10.1371/journal.pcbi.1005903, and parameters
+%were modified by Klug et al. (2020) to be used in conjunction with the BEZ
+%auditory nerve model
 
 %For the sake of efficiency, spike trains are generated using monaural
 %stimuli, and ITDs will be applied by delaying the spike trains. The high
@@ -17,9 +28,7 @@ function [thresh,cf_fib] = genITDthresholds(stimtype,mdltype,stimpar)
 %target ITD values (dlys) must be integer multiples of 10 us.
 
 %created by Luke Baltzell for presentation at Binaural Bash 2020. Modified 
-%by Luke Baltzell on 05/03/21
-
-% mdltype = 'MSO';
+%by Luke Baltzell on 05/13/21
  
 if nargin == 2
     stimpar.fs = 100000;
@@ -39,8 +48,8 @@ if nargin == 2
         stimpar.dur = 0.3;
         stimpar.tc = 0.02;
         stimpar.dB = 75;
-        stimpar.adptrck = 3;
-        stimpar.afc = 2;
+        stimpar.adptrck = 2; %2-down/1-up
+        stimpar.afc = 2; %2AFC
     elseif strcmp(stimtype,'nbNoise') == 1
         %define narrowband noise paramters following Spencer et al. (2016)
         stimpar.stim_cfs = [500 4000]; %stimulus center frequencies
@@ -79,8 +88,9 @@ cf_fib = getCFfib(cfvec_AN,stimpar.stim_cfs,bw_ext,stimtype,stimpar,eqflg);
 %% determine binaural type
 if strcmp(mdltype,'MSO') == 1
     Nfibers = 28; %desired number of fibers for each CF
-    sigma_int = 5; %microseonds
+    sigma_int = 5; %decision-stage additive internal noise (microseonds)
 elseif strcmp(mdltype,'LSO') == 1
+    %parameters follow Table 1 from Klug et al. (2020)
     lso.Tref = 1.6e-3;
     lso.ThEx = 3;
     lso.WiEx = 1.1e-3;
@@ -89,7 +99,7 @@ elseif strcmp(mdltype,'LSO') == 1
     fibersPerNeuron_ipsi_ex = 20;
     fibersPerNeuron_contra_in = 8;
     Nfibers = fibersPerNeuron_ipsi_ex + fibersPerNeuron_contra_in;
-    sigma_int = 2; %microseonds
+    sigma_int = 2; %decision-stage additive internal noise (microseonds)
 else
     error('select model type (MSO or LSO)')
 end
