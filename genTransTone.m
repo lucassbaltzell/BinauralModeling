@@ -1,15 +1,16 @@
-function y = genTransTone(fs,dur,cf,mf,tc,phi)
+function [y,flims] = genTransTone(dur,fs,cf,mf,tc,phi)
 % This function returns a "transposed" tone, following Bernstein &
 % Trahiotis (2002): https://doi.org/10.1121/1.1497620
 %OUPUTS
-%y: Transposed tone
+%y = Transposed tone
+%flims = bandwidth required to include modulation sidebands
 %INPUTS
-%fs: sampling rate
-%dur: duration of SAM tone
-%cf: carrier frequency
-%mod: modulation frequency
-%tc: duration of ramp/damp
-%phi: desired starting phase of sine waves. The first element should refer
+%dur = duration of SAM tone
+%fs = sampling rate
+%cf = carrier frequency
+%mod = modulation frequency
+%tc = duration of ramp/damp
+%phi = desired starting phase of sine waves. The first element should refer
 %to the phase of the carrier, and the second element to the modulator
 
 %created by Luke Baltzell, modified 04/30/21
@@ -45,4 +46,5 @@ if tc ~= 0
 end
 y = amtone./rms(amtone);
 
+flims = [cf-mf cf+mf];
 end

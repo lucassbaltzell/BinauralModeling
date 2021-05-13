@@ -27,11 +27,20 @@ if nargin == 2
         %define pure tone paramters following Brughera et al. (2013)
         stimpar.stim_cfs = [250 500 750 1000 1250 1500]; %stimulus center frequencies
         stimpar.dur = 0.5;
-        stimpar.tc = 0.1;
+        stimpar.tc = 0.1; %ramp/damp duration
         stimpar.dB = 70;
         stimpar.t = [1/stimpar.fs:1/stimpar.fs:stimpar.dur];
         stimpar.adptrck = 3; %3-down/1-up
         stimpar.afc = 2; %2AFC
+    elseif strcmp(stimtype,'transTone') == 1
+        %define transposed tone parameters following Bernstein & Trahiotis (2002)
+        stimpar.stim_cfs(1,:) = [4000 4000 4000 4000 4000 4000]; %carrier frequencies
+        stimpar.stim_cfs(2,:) = [32 64 128 256 512 1024]; %modulation frequencies
+        stimpar.dur = 0.3;
+        stimpar.tc = 0.02;
+        stimpar.dB = 75;
+        stimpar.adptrck = 3;
+        stimpar.afc = 2;
     elseif strcmp(stimtype,'nbNoise') == 1
         %define narrowband noise paramters following Spencer et al. (2016)
         stimpar.stim_cfs = [500 4000]; %stimulus center frequencies
@@ -97,7 +106,17 @@ binwidth = binwidth_t*(stimpar.fs/1e6); %samples
 lat_est = zeros(ncf_stim,length(dlys),Nsets);
 for s = 1:ncf_stim
     for n = 1:Nsets
-        if strcmp(stimtype,'nbNoise') == 1
+        if strcmp(stimtype,'pureTone') == 1
+            phi = (2*pi)*rand(1) - pi; %random phase
+            tstim = sin(2*pi*stimpar.stim_cfs(s)*stimpar.t + phi);
+            tstim = rampdamp(tstim,stimpar.tc,stimpar.fs);
+            tstim(2,:) = tstim;
+        elseif strcmp(stimtype,'transTone') == 1
+            phi = (2*pi)*rand(1,2) - pi; %random phase
+            tstim = genTransTone(stimpar.dur,stimpar.fs,...
+                stimpar.stim_cfs(1,s),stimpar.stim_cfs(2,s),stimpar.tc,phi);
+            tstim(2,:) = tstim;
+        elseif strcmp(stimtype,'nbNoise') == 1
             tstim = genNBnoise(stimpar.dur,stimpar.fs,stimpar.stim_cfs(s),...
                 stimpar.bw,stimpar.tflg);
             tstim = rampdamp(tstim,stimpar.tc,stimpar.fs);
@@ -107,11 +126,6 @@ for s = 1:ncf_stim
                 stimpar.stim_cfs(s),stimpar.bw,stimpar.tflg,stimpar.nord);
             tstim = rampdamp(tstim,stimpar.tc,stimpar.fs);
             tstim(2,:) = tstim; %stereo stimulus to generate L/R pairs of spikes for each stimulus
-        elseif strcmp(stimtype,'pureTone') == 1
-            phi = (2*pi)*rand(1) - pi; %random phase
-            tstim = sin(2*pi*stimpar.stim_cfs(s)*stimpar.t + phi);
-            tstim = rampdamp(tstim,stimpar.tc,stimpar.fs);
-            tstim(2,:) = tstim;
         end
         psth = genBEZpsth_stochastic(tstim,stimpar.fs,stimpar.dB,cf_fib{1,s},Nfibers);
         for d = 1:length(dlys)
@@ -134,8 +148,8 @@ for s = 1:ncf_stim
                     %gemerate coincidence detection spike trains
                     cdOut_Lhem = LSOmodelCOC(xl_ipsi_ex,xr_contra_in,lso,1/stimpar.fs);
                     cdOut_Rhem = LSOmodelCOC(xr_ipsi_ex,xl_contra_in,lso,1/stimpar.fs);
-                    rate_Lhem = sum(cdOut_Lhem,2)/dur;
-                    rate_Rhem = sum(cdOut_Rhem,2)/dur;
+                    rate_Lhem = sum(cdOut_Lhem,2)/stimpar.dur;
+                    rate_Rhem = sum(cdOut_Rhem,2)/stimpar.dur;
                     %get spike rate difference across hemifields
                     rate_dif(f) = rate_Lhem - rate_Rhem;
                 end
@@ -185,6 +199,11 @@ end
 
 %% plot interpolated sensitivity and obtain ITD threshold
 x = log(abs(dlys(2:end)*1e6));
+if size(stimpar.stim_cfs,1) == 1
+    plt_cfs = stimpar.stim_cfs;
+elseif size(stimpar.stim_cfs,1) == 2
+    plt_cfs = stimpar.stim_cfs(2,:);
+end
 figure
 for f = 1:ncf_stim
     y = abs(dprime(f,:));
@@ -203,7 +222,7 @@ for f = 1:ncf_stim
     xticklabels(xlbls);
     xlabel('ITD \mus','fontsize',12)
     ylabel('d-prime','fontsize',12)
-    title([num2str(stimpar.stim_cfs(f)) ' Hz'],'fontsize',14)
+    title([num2str(plt_cfs(f)) ' Hz'],'fontsize',14)
 end
 clear xlbls
 
@@ -227,7 +246,7 @@ end
 xlim([0.75 ncf_stim+0.25])
 xticks(1:length(thresh))
 for i = 1:length(thresh)
-    xlbls{1,i} = num2str(stimpar.stim_cfs(i));
+    xlbls{1,i} = num2str(plt_cfs(i));
 end
 xticklabels(xlbls);
 ylim([10 2000])
@@ -238,9 +257,17 @@ xlabel('Center Frequency (Hz)','fontsize',14)
 ylabel('ITD threshold (\mus)','fontsize',14)
 set(gca,'fontsize',12,'linewidth',1.5)
 if strcmp(mdltype,'MSO') == 1
-    title('Narrowband Noise (MSO)')
+    mdl_char = '(MSO)';
 elseif strcmp(mdltype,'LSO') == 1
-    title('Narrowband Noise (LSO)')
+    mdl_char = '(LSO)';
 end
-
+if strcmp(stimtype,'pureTone') == 1 
+    title(['Pure Tones ' mdl_char])
+elseif strcmp(stimtype,'transTone') == 1
+    title(['Transposed Tones ' mdl_char])
+elseif strcmp(stimtype,'nbNoise') == 1
+    title(['Narrowband Noise ' mdl_char])
+elseif strcmp(stimtype,'rustleNoise') == 1
+    title(['Rustle Noise ' mdl_char])
+end
 end

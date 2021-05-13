@@ -5,7 +5,8 @@ function cf_fib = getCFfib(an_cfs,stim_cfs,bw_ext,stimtype,stimpar,eqflg)
 %cf_fib = matrix of desired AN cf fibers for each stimulus cf
 %INPUTS
 %an_cfs = vector of all possible AN cfs
-%stim_cfs = vector of stimulus cfs
+%stim_cfs = vector of stimulus cfs (for transposed tones, first row
+%represents carrier frequency, second row represents modulation frequency
 %bw_ext = amount to extend bandwidth (octave units)
 %stimtype = type of stimulus
 %stimpar = stimulus paramters
@@ -18,14 +19,17 @@ S = length(stim_cfs);
 cf_fib = cell(1,S);
 flims_ext = cell(1,S);
 for s = 1:S
-    if strcmp(stimtype,'nbNoise') == 1
+    if strcmp(stimtype,'pureTone') == 1
+        flims = [stim_cfs(s) stim_cfs(s)];
+    elseif strcmp(stimtype,'transTone') == 1
+        [~,flims] = genTransTone(stimpar.dur,stimpar.fs,stim_cfs(1,s),...
+            stim_cfs(2,s));
+    elseif strcmp(stimtype,'nbNoise') == 1
         [~,flims] = genNBnoise(stimpar.dur,stimpar.fs,stim_cfs(s),...
             stimpar.bw,stimpar.tflg);
     elseif strcmp(stimtype,'rustleNoise') == 1
         [~,flims] = genNBrustle(stimpar.dur,stimpar.fs,stimpar.gpwidth,...
             stim_cfs(s),stimpar.bw,stimpar.tflg,stimpar.nord);
-    elseif strcmp(stimtype,'pureTone') == 1
-        flims = [stim_cfs(s) stim_cfs(s)];
     end
     flims_ext{1,s} = [flims(1)/2^(1/(2/bw_ext)) flims(2)*2^(1/(2/bw_ext))]; %extend bw
     [~,ind] = find(flims_ext{1,s}(1) < an_cfs & flims_ext{1,s}(2) > an_cfs);
