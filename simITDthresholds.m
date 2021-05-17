@@ -1,4 +1,4 @@
-function [thresh,cf_fib] = genITDthresholds(stimtype,mdltype,stimpar)
+function [thresh,cf_fib] = simITDthresholds(stimtype,mdltype,stimpar)
 %This script simulates ITD sensitivity for a given stimulus type and model 
 %type. This simulation is based on simulated spike trains at the output of 
 %the BEZ phenomenolgical auditory nerve (AN) model. This model, described 
