@@ -16,12 +16,15 @@ Also included is a stimulus file ('BUG_T16_1_3.wav') from the BUG corpus describ
 The functions "genBEZpsth.m" and"genBEZpsth_stochasic.m" generate spike train outputs from the BEZ auditory nerve model with modified IHC filter
 
 # modeling ITD sensitivity
-The function "genITDthresholds.m" generates predicted ITD thresholds for a given stimulus type (e.g. pure tone, narrowband noise), a given model type ('MSO' vs 'LSO'), and a given set of stimulus parameters. ITD sensitivity is simulated using a pipeline modeled after Moncada-Torres et al. (2018).
+The function "simITDthresholds.m" simulates ITD thresholds for a given stimulus type (e.g. pure tone, narrowband noise), a given model type ('MSO' vs 'LSO'), and a given set of stimulus parameters. ITD sensitivity is simulated using a pipeline modeled after Moncada-Torres et al. (2018).
 
-Also included:
-The script "genITDthresholds_PureTones.m" generates predicted ITD sensitivity to a set of pure tone stimuli. Stimulus parameters were chosen to follow Brughera et al. (2013)
-The script "genITDthresholds_NBnoise.m" generates predicted ITD sensitivity to a pair of narrowband noise stimuli (500 Hz and 4kHz center frequencies). These stimuli have been used in a number of binaural studies, (e.g. Spencer et al., 2016), and parameter values were chosen to match this literature.
-The script "genITDthresholds_RustleNoise.m" generates predicted ITD sensitivity to a set of octave-band rustle noise stimuli. Stimulus parameters were chosen to match a dataset collected in our lab that has yet to be published, but an interim summary was presented at the 2020 Binaural Bash.
+Also included as standalone scripts:
+The script "simITDthresholds_NBnoise.m" simulates ITD sensitivity for a pair of narrowband noise stimuli (500 Hz and 4kHz center frequencies). These stimuli have been used in a number of binaural studies, (e.g. Spencer et al., 2016), and parameter values were chosen to match this literature.
+The script "simITDthresholds_RustleNoise.m" simulates ITD sensitivity for a set of octave-band rustle noise stimuli. Stimulus parameters were chosen to match a dataset collected in our lab that has yet to be published, but an interim summary was presented at the 2020 Binaural Bash.
 
 # modeling temporal weighting functions
-the function "genANwghts.m" generates a simulated TWF for the speech token 'BUG_T16_1_3.wav'. See Baltzell et al. (under review) for details
+the function "simANwghts.m" generates a simulated TWF for the speech token 'BUG_T16_1_3.wav'. See Baltzell et al. (under review) for details
+
+# modeling hearing impairment
+The function "simHCloss.m" returns cohc and cihc values corresponding to a particular audiometric hearing loss
+This function calls the function "getCHCfun.m", which returns a surface of audiometric thresholds corresponding to a pair of ohc/ihc values, for a particular audimetric frequency
