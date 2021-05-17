@@ -15,6 +15,8 @@ Also included is a stimulus file ('BUG_T16_1_3.wav') from the BUG corpus describ
 
 The functions "genBEZpsth.m" and"genBEZpsth_stochasic.m" generate spike train outputs from the BEZ auditory nerve model with modified IHC filter
 
+Some functions in the MiscFunctions repository may be necessary to run the functions in this toolbox, so clone these functions and add to your matlab path
+
 # modeling ITD sensitivity
 The function "simITDthresholds.m" simulates ITD thresholds for a given stimulus type (e.g. pure tone, narrowband noise), a given model type ('MSO' vs 'LSO'), and a given set of stimulus parameters. ITD sensitivity is simulated using a pipeline modeled after Moncada-Torres et al. (2018).
 
