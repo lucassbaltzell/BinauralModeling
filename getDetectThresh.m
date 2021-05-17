@@ -34,7 +34,7 @@ end
 
 %% define probe stimuli (Zhang et al., 2001; figure 3)
 fs = 100000;
-dur = 0.05;
+dur = 0.075;
 t = [1/fs:1/fs:dur];
 tc = 0.0025;
 stim = sin(2*pi*stim_cf*t);
