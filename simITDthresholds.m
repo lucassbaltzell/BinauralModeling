@@ -263,7 +263,6 @@ ylim([10 2000])
 yline(1000,'r:','linewidth',2);
 yticks([10,100,1000,2000])
 yticklabels({'10','100','1000','u.m.'});
-xlabel('Center Frequency (Hz)','fontsize',14)
 ylabel('ITD threshold (\mus)','fontsize',14)
 set(gca,'fontsize',12,'linewidth',1.5)
 if strcmp(mdltype,'MSO') == 1
@@ -273,11 +272,15 @@ elseif strcmp(mdltype,'LSO') == 1
 end
 if strcmp(stimtype,'pureTone') == 1 
     title(['Pure Tones ' mdl_char])
+    xlabel('Frequency (Hz)','fontsize',14)
 elseif strcmp(stimtype,'transTone') == 1
     title(['Transposed Tones ' mdl_char])
+    xlabel('Modulation Frequency (Hz)','fontsize',14)
 elseif strcmp(stimtype,'nbNoise') == 1
     title(['Narrowband Noise ' mdl_char])
+    xlabel('Center Frequency (Hz)','fontsize',14)
 elseif strcmp(stimtype,'rustleNoise') == 1
     title(['Rustle Noise ' mdl_char])
+    xlabel('Center Frequency (Hz)','fontsize',14)
 end
 end
