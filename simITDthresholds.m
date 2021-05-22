@@ -27,6 +27,10 @@ function [thresh,cf_fib] = simITDthresholds(stimtype,mdltype,stimpar,ANpar)
 %mdltype = 'MSO' or 'LSO'
 %stimpar = stimulus parameters corresponding to stimtype (optional)
 %ANpar = parameters for BEZ AN model (optional)
+%OUTPUTS
+%thresh = ITD thresholds corresponding to each stimulus (center) frequency
+%cf_fib = center frequencies of AN fibers included in each threshold
+%estimate
 
 %created by Luke Baltzell for presentation at Binaural Bash 2020. Modified 
 %by Luke Baltzell on 05/13/21
