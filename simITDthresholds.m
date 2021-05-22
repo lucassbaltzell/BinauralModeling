@@ -1,5 +1,5 @@
 function [thresh,cf_fib] = simITDthresholds(stimtype,mdltype,stimpar,ANpar)
-%This script simulates ITD sensitivity for a given stimulus type and model 
+%This function simulates ITD sensitivity for a given stimulus type and model 
 %type. This simulation is based on simulated spike trains at the output of 
 %the BEZ phenomenolgical auditory nerve (AN) model. This model, described 
 %by Bruce et al. (2018) https://doi.org/10.1016/j.heares.2017.12.016, 
@@ -7,25 +7,26 @@ function [thresh,cf_fib] = simITDthresholds(stimtype,mdltype,stimpar,ANpar)
 %We have modified the low-pass filter cutoff of the inner hair cell model
 %in order to better account for observed human phase locking limits (see
 %README)
-
 %The method for obtaining ITS sensitivity roughly follows the procedure 
 %described by Moncada-Torres et al. (2018) https://doi.org/10.1121/1.5051322.
-
 %The 'MSO' model performs a cross-correlation on the spike-train output of
 %the auditory nerve model, following Louge et al. (2004) 
 %https://doi.org/10.1152/jn.00816.2003. A centrality weight is applied to
 %this output following Stern & Shear (1996) https://doi.org/10.1121/1.417937
-
 %The 'LSO' model performs a hemispheric coincidence detection with
 %ipsilateral and contralateral inputs. This model was described by Ashida
 %et al. (2017) https://doi.org/10.1371/journal.pcbi.1005903, and parameters
 %were modified by Klug et al. (2020) to be used in conjunction with the BEZ
 %auditory nerve model
-
 %For the sake of efficiency, spike trains are generated using monaural
 %stimuli, and ITDs will be applied by delaying the spike trains. The high
 %sample rate (100 kHz) allows for a delay resolution of 10 us, and so
 %target ITD values (dlys) must be integer multiples of 10 us.
+%INPUTS
+%stimtype = stimulus type ('pureTone','transTone','nbNoise','rustleNoise')
+%mdltype = 'MSO' or 'LSO'
+%stimpar = stimulus parameters corresponding to stimtype (optional)
+%ANpar = parameters for BEZ AN model (optional)
 
 %created by Luke Baltzell for presentation at Binaural Bash 2020. Modified 
 %by Luke Baltzell on 05/13/21
