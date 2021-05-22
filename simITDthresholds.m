@@ -1,4 +1,4 @@
-function [thresh,cf_fib] = simITDthresholds(stimtype,mdltype,stimpar)
+function [thresh,cf_fib] = simITDthresholds(stimtype,mdltype,stimpar,ANpar)
 %This script simulates ITD sensitivity for a given stimulus type and model 
 %type. This simulation is based on simulated spike trains at the output of 
 %the BEZ phenomenolgical auditory nerve (AN) model. This model, described 
@@ -30,7 +30,7 @@ function [thresh,cf_fib] = simITDthresholds(stimtype,mdltype,stimpar)
 %created by Luke Baltzell for presentation at Binaural Bash 2020. Modified 
 %by Luke Baltzell on 05/13/21
  
-if nargin == 2
+if exist('stimpar','var') == 0 || isempty(stimpar) == 1
     stimpar.fs = 100000;
     if strcmp(stimtype,'pureTone') == 1
         %define pure tone paramters following Brughera et al. (2013)
@@ -73,6 +73,20 @@ if nargin == 2
         stimpar.adptrck = 3; %2-down/1-up
         stimpar.afc = 2; %2AFC
     end
+end
+
+if exist('ANpar','var') == 0
+    ANpar.nrep = 1;       %number of repetitions for the psth
+    ANpar.cohc = 1;       %OHC scaling factor: 1 is normal OHC function; 0 is complete OHC dysfunction
+    ANpar.cihc = 1;       %IHC scaling factor: 1 is normal IHC function; 0 is complete IHC dysfunction
+    ANpar.species = 2;    %human with BM tuning from Shera et al. (PNAS 2002)
+    ANpar.noiseType = 1;  %1 for variable fGn and 0 for fixed (frozen) fGn
+    ANpar.implnt = 0;     %implnt is for "approxiate" or "actual" implementation of the power-law functions: "0" for approx. and "1" for actual implementation
+    ANpar.spont.mu = [0.1 4 70]; %[low_sr med_sr high_sr] row vector
+    ANpar.spont.sd = [0.1 4 30]; %[low_sr med_sr high_sr] row vector
+    ANpar.spont.lims = [1e-3 0.2; 0.2 18; 18 180]; % [low_sr; med_sr; high_sr]
+    ANpar.tabs_lims = [0.0002085 0.0006915];  %tabs is the range of absolute refractory period in s
+    ANpar.trel_lims = [0.000131 0.000894];  %trel is the range of relative refractory period in s
 end
 
 ncf_stim = length(stimpar.stim_cfs);
@@ -137,7 +151,7 @@ for s = 1:ncf_stim
             tstim = rampdamp(tstim,stimpar.tc,stimpar.fs);
             tstim(2,:) = tstim; %stereo stimulus to generate L/R pairs of spikes for each stimulus
         end
-        psth = genBEZpsth_stochastic(tstim,stimpar.fs,stimpar.dB,cf_fib{1,s},Nfibers);
+        psth = genBEZpsth_stochastic(tstim,stimpar.fs,stimpar.dB,cf_fib{1,s},Nfibers,ANpar);
         for d = 1:length(dlys)
             for f = 1:length(cf_fib{1,s})
                 if strcmp(mdltype,'MSO') == 1
