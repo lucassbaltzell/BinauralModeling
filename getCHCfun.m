@@ -14,8 +14,8 @@ function CHCfun = getCHCfun(cfs,type,pflg)
 %created by Luke Baltzell 05/14/21
 
 %set resolutions
-CHC = [0:0.2:1];
-CHCq = [0:0.025:1];
+CHC = [0:0.1:1];
+CHCq = [0:0.01:1];
 
 %obtain type 1 thresholds
 if type == 1
