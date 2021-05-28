@@ -40,7 +40,7 @@ for c = 1:size(CHCfun.thresh,1)
     end
 end
 
-tol = 5; %tolerance in dB
+tol = 1.5; %tolerance in dB
 Out.cihc = zeros(length(cfs),length(cohcIn),length(HIthresh));
 Out.cohc = zeros(length(cfs),length(cohcIn),length(HIthresh));
 Out.thresh = zeros(length(cfs),length(cohcIn),length(HIthresh));
