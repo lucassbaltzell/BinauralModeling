@@ -100,8 +100,8 @@ dlys = [0 10 20 40 80 160 320 640 1280]*1e-6; %set of (positive) delays over whi
 cfvec_AN = getGreenwoodCF([0:0.01:1]); %generate 100 AN CFs over the length of the cochlea 
 
 %% calculate AN cfs for each stimulus cf
-bw_ext = 1/8; %extend bandwidth by 8th octave
-eqflg = 1; %get equal numbers of fibers for each stimulus
+bw_ext = 2; %extend bandwidth by 4th octave
+eqflg = 0; %get equal numbers of fibers for each stimulus
 cf_fib = getCFfib(cfvec_AN,stimpar.stim_cfs,bw_ext,stimtype,stimpar,eqflg);
 
 %% determine binaural type

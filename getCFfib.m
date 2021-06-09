@@ -60,7 +60,7 @@ if sum(nfibs - max(nfibs)) ~= 0
                    cf_fib{1,s} = cat(2,cf_fib{1,s},an_cfs(ui+1));
                    uc = an_cfs(ui+1);
                end
-               if length(cf_fib{1,s}) == max(nfibs)
+               if length(cf_fib{1,s}) >= max(nfibs)
                    flg = 1;
                end
            end
